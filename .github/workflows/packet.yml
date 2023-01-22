@@ -31,8 +31,8 @@ jobs:
           tree ./
           sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./xiaomi/description.xml
           sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./huawei/description.xml
-          zip -r "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.hwt" ./huawei/*
-          zip -r "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.mtz" ./xiaomi/*
+          zip -r -j "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.hwt" ./huawei/*
+          zip -r -j "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.mtz" ./xiaomi/*
       -
         name: Generate release tag
         id: tag
