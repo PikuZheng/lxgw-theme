@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "release_tag=${{needs.get-version.outputs.CUR_VERSION}}" >> $GITHUB_OUTPUT
           touch release.txt
-          echo "同步更新上游代码" >> release.txt
+          echo "鍚屾鏇存柊涓婃父浠ｇ爜" >> release.txt
           echo ${{ github.sha }} >> Release.txt
           echo "status=success" >> $GITHUB_OUTPUT
       -
