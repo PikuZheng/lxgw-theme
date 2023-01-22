@@ -1,0 +1,51 @@
+name: pack release
+
+on:
+#  push:
+#    branches:
+#      - master
+#  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pack-release:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - 
+        name: get latest release
+        id: get-version
+        uses: pozetroninc/github-action-get-latest-release@master
+        with:
+          repository: lxgw/LxgwWenKai-Screen
+      - 
+        name: pack font
+        run: |
+          cd ${{ github.workspace }}
+          wget https://github.com/lxgw/LxgwWenKai-Screen/releases/download/${{ steps.get-version.outputs.release }}/LXGWWenKaiScreenR.ttf
+          cp LXGWWenKaiScreenR.ttf ./huawei/fonts/DroidSansChinese.ttf
+          cp LXGWWenKaiScreenR.ttf ./xiaomi/fonts/DroidSansFallback.ttf
+          sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./xiaomi/description.xml
+          sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./huawei/description.xml
+          zip -r "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.hwt" ./huawei/*
+          zip -r "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.mtz" ./xiaomi/*
+      -
+        name: Generate release tag
+        id: tag
+        run: |
+          echo "release_tag=${{needs.get-version.outputs.CUR_VERSION}}" >> $GITHUB_OUTPUT
+          touch release.txt
+          echo "同步更新上游代码" >> release.txt
+          echo ${{ github.sha }} >> Release.txt
+          echo "status=success" >> $GITHUB_OUTPUT
+      -
+        name: Upload to release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          tag_name: ${{ steps.get-version.outputs.release }}
+          files: |
+            ${{ github.workspace }}/LXGW*
