@@ -25,8 +25,9 @@ jobs:
         run: |
           cd ${{ github.workspace }}
           wget https://github.com/lxgw/LxgwWenKai-Screen/releases/download/${{ steps.get-version.outputs.release }}/LXGWWenKaiScreenR.ttf
-          cp LXGWWenKaiScreenR.ttf ./huawei/fonts/DroidSansChinese.ttf
-          cp LXGWWenKaiScreenR.ttf ./xiaomi/fonts/DroidSansFallback.ttf
+          tree ./
+          cp LXGWWenKaiScreenR.ttf huawei/fonts/DroidSansChinese.ttf
+          cp LXGWWenKaiScreenR.ttf xiaomi/fonts/DroidSansFallback.ttf
           sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./xiaomi/description.xml
           sed -i "s/1.250/${{ steps.get-version.outputs.release }}/" ./huawei/description.xml
           zip -r "LXGW WenKai Screen R-${{ steps.get-version.outputs.release }}.hwt" ./huawei/*
